@@ -1,0 +1,54 @@
+ VC Slider控件，根据鼠标单击位置来显示滑块位置！
+2011-08-16 17:49 3848人阅读 评论(3) 收藏 举报
+ 分类：  VC++（71）  
+版权声明：本文为博主原创文章，未经博主允许不得转载。
+
+首先自己写一个MySlider类。。该类继承 CSliderCtrl类。。
+
+MySlider类响应LButtonDown消息来实现鼠标单击定位。。。
+
+ 
+
+[cpp] view plain copy
+void MySlider::OnLButtonDown(UINT nFlags, CPoint point)   
+{  
+    // TODO: Add your message handler code here and/or call default  
+    CSliderCtrl::OnLButtonDown(nFlags, point);  
+    CRect   rectClient,rectChannel;   
+    GetClientRect(rectClient);   
+    GetChannelRect(rectChannel);   
+    int nMax = 0;  
+    int nMin = 0;  
+    GetRange(nMin,nMax);  
+    int nPos =     
+        (nMax - nMin)*(point.x - rectClient.left - rectChannel.left)/(rectChannel.right - rectChannel.left);   
+    SetPos(nPos);  
+      
+}  
+
+在主界面中：(***Dlg.h)
+
+添加：#include "MySlider.h"
+
+MySlider m_MySlider;
+
+ 
+
+(***Dlg.cpp)  关联变量。。。
+
+[cpp] view plain copy
+void CCSliderPosDlg::DoDataExchange(CDataExchange* pDX)  
+{  
+    CDialog::DoDataExchange(pDX);  
+    //{{AFX_DATA_MAP(CCSliderPosDlg)  
+        // NOTE: the ClassWizard will add DDX and DDV calls here  
+    //}}AFX_DATA_MAP  
+    DDX_Control(pDX,IDC_SLIDER1,m_MySlider);   
+}  
+OnInitDialog()
+
+｛
+
+m_MySlider.SetRange(0,100); //设置Slider的范围。。。
+
+｝
